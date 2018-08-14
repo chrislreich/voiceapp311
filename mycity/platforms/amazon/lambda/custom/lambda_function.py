@@ -66,6 +66,11 @@ def platform_to_mycity_request(event):
     mycity_request.reprompt_text = None
     mycity_request.should_end_session = False
 
+    # Set API variables
+    api_endpoint = event['context']['System']['apiEndpoint']
+    api_token = event['context']['System']['apiAccessToken']
+    mycity_request.api_variables = {'apiEndpoint': api_endpoint,  "apiAccessToken" : api_token}
+
     return mycity_request
 
 

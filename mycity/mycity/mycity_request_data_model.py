@@ -25,8 +25,12 @@ class MyCityRequestDataModel:
         self._application_id = None
         self._intent_name = None
         self._intent_variables = {}
+<<<<<<< HEAD
         self._device_id = None
         self._api_access_token = None
+=======
+        self._api_variables = {}
+>>>>>>> add RSS functionality
 
     def __str__(self):
         return """\
@@ -39,8 +43,12 @@ class MyCityRequestDataModel:
             application_id={},
             intent_name={},
             intent_variables={},
+<<<<<<< HEAD
             device_id={},
             api_access_token={}
+=======
+            api_variables={}
+>>>>>>> add RSS functionality
         >
         """.format(
             self._request_type,
@@ -53,6 +61,7 @@ class MyCityRequestDataModel:
             self._intent_variables,
             self._device_id,
             self._api_access_token
+            self._api_variables
         )
 
     @property
@@ -154,3 +163,13 @@ class MyCityRequestDataModel:
     @api_access_token.setter
     def api_access_token(self, value):
         self._api_access_token = value
+    @property
+    def api_variables(self):
+        """
+        Alexa API variables used primarily for progessive responses
+        """
+        return self._api_variables
+
+    @api_variables.setter
+    def api_variables(self, value):
+        self._api_variables = value

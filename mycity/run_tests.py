@@ -1,5 +1,8 @@
 import unittest
 
+import sys
+sys.path.append("/Users/creich/chrislreich/voiceapp311/mycity")
+
 import mycity.test.integration_tests.test_snow_emergency_parking as snow_parking
 import mycity.test.integration_tests.test_trash_intent as trash_intent
 import mycity.test.integration_tests.test_unhandled_intent as unhandled_intent
