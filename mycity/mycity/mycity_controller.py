@@ -14,6 +14,7 @@ from .intents.unhandled_intent import unhandled_intent
 from .intents.get_alerts_intent import get_alerts_intent
 from .intents.snow_parking_intent import get_snow_emergency_parking_intent
 from .intents import intent_constants
+from .intents.news_intent import read_news_initialization, read_news_next_item, read_news_user_response, request_user_news_feed
 
 
 LOG_CLASS = '\n\n[class: MyCityController]'
@@ -127,6 +128,18 @@ def on_intent(mycity_request):
         # Capture that into session data here
         set_address_in_session(mycity_request)
 
+
+    # Handle Intents while reading news
+    if "reading_news" in mycity_request.session_attributes and mycity_request.session_attributes['reading_news'] == True:
+        if mycity_request.intent_name == "AMAZON.NextIntent":
+            return read_news_next_item(mycity_request)
+        elif mycity_request.intent_name == "AMAZON.NoIntent":
+            return read_news_user_response(mycity_request, False)
+        elif mycity_request.intent_name == "AMAZON.YesIntent":
+            return read_news_user_response(mycity_request, True)
+        
+
+
     # session_attributes = session.get("attributes", {})
     if mycity_request.intent_name == "GetAddressIntent":
         return get_address_from_session(mycity_request)
@@ -142,6 +155,11 @@ def on_intent(mycity_request):
             else get_snow_emergency_parking_intent(mycity_request)
     elif mycity_request.intent_name == "GetAlertsIntent":
         return get_alerts_intent(mycity_request)
+    elif mycity_request.intent_name == "ReadNewsIntent":
+        if "resolutions" in mycity_request.intent_variables['RSS_FEED_NAME']:
+            return read_news_initialization(mycity_request)
+        else:
+            return request_user_news_feed(mycity_request)
     elif mycity_request.intent_name == "AMAZON.HelpIntent":
         return get_welcome_response(mycity_request)
     elif mycity_request.intent_name == "AMAZON.StopIntent" or \

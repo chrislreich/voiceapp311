@@ -71,7 +71,7 @@ def request_user_address_response(mycity_request):
     """
     print(
         '[module: user_address_intent]',
-        '[method: set_address_in_session]',
+        '[method: request_user_address_response]',
         'MyCityRequestDataModel received:',
         str(mycity_request)
     )

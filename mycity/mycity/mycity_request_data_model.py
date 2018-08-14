@@ -14,6 +14,7 @@ class MyCityRequestDataModel:
         self._application_id = None
         self._intent_name = None
         self._intent_variables = {}
+        self._api_variables = {}
 
     def __str__(self):
         return """\
@@ -25,7 +26,8 @@ class MyCityRequestDataModel:
             session_attributes={},
             application_id={},
             intent_name={},
-            intent_variables={}
+            intent_variables={},
+            api_variables={}
         >
         """.format(
             self._request_type,
@@ -35,7 +37,8 @@ class MyCityRequestDataModel:
             self._session_attributes,
             self._application_id,
             self._intent_name,
-            self._intent_variables
+            self._intent_variables,
+            self._api_variables
         )
 
     @property
@@ -114,3 +117,14 @@ class MyCityRequestDataModel:
     @intent_variables.setter
     def intent_variables(self, value):
         self._intent_variables = value
+
+    @property
+    def api_variables(self):
+        """
+        Alexa API variables used primarily for progessive responses
+        """
+        return self._api_variables
+
+    @api_variables.setter
+    def api_variables(self, value):
+        self._api_variables = value

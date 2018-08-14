@@ -4,6 +4,31 @@
             "invocationName": "boston data",
             "intents": [
                 {
+                    "name": "ReadNewsIntent",
+                    "slots": [
+                        {
+                            "name": "RSS_FEED_NAME",
+                            "type": "LIST_OF_RSS_NEWS_FEEDS",
+                            "samples": [
+                                "How about {RSS_FEED_NAME}",
+                                "Read the {RSS_FEED_NAME} news",
+                                "From {RSS_FEED_NAME}",
+                                "Read from {RSS_FEED_NAME}",
+                                "Read {RSS_FEED_NAME}",
+                                "I want {RSS_FEED_NAME}",
+                                "{RSS_FEED_NAME}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "{RSS_FEED_NAME} news",
+                        "Read the {RSS_FEED_NAME} news",
+                        "Read me the news from {RSS_FEED_NAME}",
+                        "read me the news",
+                        "what is the news"
+                    ]
+                },
+                {
                     "name": "SetAddressIntent",
                     "slots": [
                         {
@@ -108,9 +133,50 @@
                 {
                     "name": "AMAZON.CancelIntent",
                     "samples": []
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
                 }
             ],
-            "types": []
+            "types": [
+                {
+                    "name": "LIST_OF_RSS_NEWS_FEEDS",
+                    "values": [
+                        {
+                            "id": "UniversalHub",
+                            "name": {
+                                "value": "Universal Hub",
+                                "synonyms": [
+                                    "Universal",
+                                    "Hub"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Boston.gov",
+                            "name": {
+                                "value": "Boston.gov",
+                                "synonyms": [
+                                    "Boston Government",
+                                    "Government of Boston",
+                                    "Boston news",
+                                    "Boston",
+                                    "City of Boston"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         "dialog": {
             "intents": [
@@ -145,6 +211,22 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "ReadNewsIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "RSS_FEED_NAME",
+                            "type": "LIST_OF_RSS_NEWS_FEEDS",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1011756368442.1339331508249"
+                            }
+                        }
+                    ]
                 }
             ]
         },
@@ -173,6 +255,15 @@
                     {
                         "type": "PlainText",
                         "value": "What's your address?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1011756368442.1339331508249",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which news feed would you like to hear?"
                     }
                 ]
             }
