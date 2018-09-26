@@ -18,7 +18,7 @@ class MyCityResponseDataModel:
     def __init__(self):
         self._session_attributes = {}
         self._card_title = None
-        self._output_speech = None
+        self._output_speech = {}
         self._reprompt_text = None
         self._should_end_session = None
         self._intent_variables = {}
@@ -70,7 +70,8 @@ class MyCityResponseDataModel:
 
     @output_speech.setter
     def output_speech(self, value):
-        self._output_speech = value
+        self._output_speech = {'type': 'PlainText', 'text': value}
+
 
     @property
     def reprompt_text(self):
@@ -129,7 +130,8 @@ class MyCityResponseDataModel:
     def dialog_directive(self, value):
         valid_directives = [
             "Delegate", # Delegate dialog decision to platform
-            "ElicitSlotTrash" # Ask for address for trash
+            "ElicitSlotTrash", # Ask for address for trash
+            "ElicitSlotRss" # Ask for RSS feed name
         ]
 
         if value not in valid_directives:
@@ -142,4 +144,13 @@ class MyCityResponseDataModel:
                     'type' : 'Dialog.ElicitSlot',
                     'slotToElicit' : 'Address'
                     }
+        elif value == "ElicitSlotRss":
+            self._dialog_directive = {
+                    'type': 'Dialog.ElicitSlot',
+                    'slotToElicit': 'RSS_FEED_NAME'
+                    }
+
+
+    def output_ssml(self, value):
+        self._output_speech = {'type': 'SSML', 'ssml' : value}
                         

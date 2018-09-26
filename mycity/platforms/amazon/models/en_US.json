@@ -25,7 +25,15 @@
                         "Read the {RSS_FEED_NAME} news",
                         "Read me the news from {RSS_FEED_NAME}",
                         "read me the news",
-                        "what is the news"
+			"read the news",
+			"the news",
+			"news",
+			"What is the news",
+			"What is the {RSS_FEED_NAME} news",
+			"Tell me the news",
+			"Tell me the {RSS_FEED_NAME} news",
+			"I want the news",
+			"I want the {RSS_FEED_NAME} news"
                     ]
                 },
                 {

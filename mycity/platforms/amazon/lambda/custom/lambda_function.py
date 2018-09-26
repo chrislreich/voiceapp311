@@ -109,10 +109,7 @@ def mycity_response_to_platform(mycity_response):
             }
         else: 
             response = {
-                'outputSpeech': {
-                    'type': 'PlainText',
-                    'text': mycity_response.output_speech
-             },
+                'outputSpeech': mycity_response.output_speech,
                 'card': {
                  'type': 'Simple',
                     'title': 'SessionSpeechlet - ' + str(mycity_response.card_title),
@@ -131,10 +128,7 @@ def mycity_response_to_platform(mycity_response):
             }
     else:
         response = {
-            'outputSpeech': {
-                'type': 'PlainText',
-                'text': mycity_response.output_speech
-            },
+            'outputSpeech': mycity_response.output_speech,
             'card': {
                 'type': 'Simple',
                 'title': str(mycity_response.card_title),
