@@ -40,8 +40,11 @@ class MyCityRequestDataModel:
             application_id={},
             intent_name={},
             intent_variables={},
+<<<<<<< HEAD
             device_id={},
             api_access_token={}
+=======
+>>>>>>> c8291ba348f4a0bce0aafb3293b8cae8927c8f65
             api_variables={}
         >
         """.format(

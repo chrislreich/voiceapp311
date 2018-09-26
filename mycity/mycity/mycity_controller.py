@@ -16,7 +16,6 @@ from .intents.snow_parking_intent import get_snow_emergency_parking_intent
 from .intents import intent_constants
 from .intents.rss_intent import rss_initialization, rss_next_item, rss_user_response, rss_user_request
 
-
 LOG_CLASS = '\n\n[class: MyCityController]'
 
 
