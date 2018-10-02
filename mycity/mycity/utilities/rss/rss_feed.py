@@ -5,8 +5,12 @@ from bs4 import BeautifulSoup
 import requests
 import feedparser
 
+# List of class names that inheirit fomr RssFeed
 child_class_list = ['Boston.gov', 'Universal Hub']
 
+"""
+Abstract Base Class for interacting with individual RSS news feeds
+"""
 class RssFeed(ABC):
 
     def __init__(self):
@@ -31,6 +35,7 @@ class RssFeed(ABC):
         pass
 
     def clean_html_text(self, html_string):
+        """Clean HTML encoded strings to plain text"""
         cleaned_string = self.remove_non_breaking_space(html_string)
         cleaned_string = cleaned_string.strip()
         return cleaned_string
@@ -40,6 +45,11 @@ class RssFeed(ABC):
         return input_string.replace(u'\xa0', u' ')
 
     def format_story_string(self, story_string):
+        """
+        Takes a string representing a news story
+        and formats into SSML format for Alexa speech
+        """
+
         next_story_low_pitch = ssml_utils.low_pitch("Would you like to hear the next story?")
         next_story_prompt_paragraph = ssml_utils.wrap_paragraph(next_story_low_pitch)
         concat_prompt_paragraph = story_string + next_story_prompt_paragraph
@@ -48,6 +58,12 @@ class RssFeed(ABC):
 
 
     def get_rss_feed(self):
+        """
+        Generic function that makes HTTP request
+        for the RSS feed. The URL is specified in
+        the contructor of the implementing child class
+        """
+
         response = requests.get(self._feed_url)
 
         if response.status_code == 200:
@@ -62,12 +78,21 @@ class RssFeed(ABC):
 
 
     def get_rss_headline_count(self):
+        """
+        Return the number of entries currently in an RSS feed
+        """
+
         feed = self.get_rss_feed()
         return len(feed.entries)
 
 
 
     def parse_rss_headline(self, headline_number):
+        """
+        Take advantage of common structure of RSS feeds to pull out
+        Headline, Published Date, and URL of story. Function does not
+        need to be implemented for child classes
+        """
         feed = self.get_rss_feed()
         if feed == None:
             return None

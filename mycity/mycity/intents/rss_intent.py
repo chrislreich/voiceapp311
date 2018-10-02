@@ -8,6 +8,12 @@ from mycity.utilities.rss.rss_feed import child_class_list
 import requests
 
 def rss_user_request(mycity_request):
+    """
+    Invoked when a user first requests for news to be read.
+    Takes a mycity_request object and starts a Alexa Dialog,
+    asking the user to specify an RSS feed
+    """
+
     mycity_response = MyCityResponseDataModel()
 
     mycity_response.session_attributes = mycity_request.session_attributes
@@ -18,6 +24,13 @@ def rss_user_request(mycity_request):
     return mycity_response
 
 def rss_initialization(mycity_request):
+    """
+    Once the specific RSS feed is decided upon,
+    fetch the Slot value from the request JSON,
+    set up a few RSS-specific session variables
+    in the Request object, and pass the request object
+    onwards
+    """
     # Mutate request session variables, then pass request onwards for processing
     feed_name = mycity_request.intent_variables['RSS_FEED_NAME']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
 
@@ -36,7 +49,7 @@ def rss_initialization(mycity_request):
     return rss_next_item(mycity_request)
 
 
-def rss_next_item(mycity_request):
+def rss_next_headline(mycity_request):
     mycity_response = MyCityResponseDataModel()
     mycity_response.session_attributes = mycity_request.session_attributes
     mycity_response.card_title = "Reading {} news feed".format(mycity_response.session_attributes['rss_feed_name'])

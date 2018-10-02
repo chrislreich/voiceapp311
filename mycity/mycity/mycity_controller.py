@@ -14,7 +14,7 @@ from .intents.unhandled_intent import unhandled_intent
 from .intents.get_alerts_intent import get_alerts_intent
 from .intents.snow_parking_intent import get_snow_emergency_parking_intent
 from .intents import intent_constants
-from .intents.rss_intent import rss_initialization, rss_next_item, rss_user_response, rss_user_request
+from .intents.rss_intent import rss_initialization, rss_next_headline, rss_user_response, rss_user_request
 
 LOG_CLASS = '\n\n[class: MyCityController]'
 
@@ -134,7 +134,7 @@ def on_intent(mycity_request):
     # Handle Intents while reading news
     if "reading_news" in mycity_request.session_attributes and mycity_request.session_attributes['reading_news'] == True:
         if mycity_request.intent_name == "AMAZON.NextIntent":
-            return rss_next_item(mycity_request)
+            return rss_next_headline(mycity_request)
         elif mycity_request.intent_name == "AMAZON.NoIntent":
             return rss_user_response(mycity_request, False)
         elif mycity_request.intent_name == "AMAZON.YesIntent":

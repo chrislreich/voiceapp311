@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
 
+
+"""
+Concrete implementation of RssFeed specific to the Boston.gov RSS
+"""
 class BostonRssFeed(RssFeed):
     def __init__(self):
         self._feed_name = "Boston.gov"
@@ -20,9 +24,16 @@ class BostonRssFeed(RssFeed):
         return self._feed_url
 
     def make_datetime(self, published_date_string):
+        """
+        Return a datetime object from the date string in Boston.gov feed
+        """
         return datetime.strptime(published_date_string, "%A, %B %d, %Y - %I:%M%p")
 
     def parse_news_story(self, story_url):
+        """
+        Take a URL, expected to be hosted by Boston.gov website, and
+        parse HTML into a string that can be spoken aloud by Alexa
+        """
         response = requests.get(story_url)
 
         if response.status_code != 200:
@@ -33,6 +44,8 @@ class BostonRssFeed(RssFeed):
         output_string = ""
         for p in paragraphs:
             cleaned_html_string = super().clean_html_text(p.text)
+            # Length check is because 8,000 character restriction
+            # On output_speech by Amazon Alexa
             if cleaned_html_string == "" or len(output_string) > 6500:
                 continue
             output_string += ssml_utils.wrap_paragraph(cleaned_html_string)
