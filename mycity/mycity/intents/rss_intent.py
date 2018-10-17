@@ -12,6 +12,13 @@ def rss_user_request(mycity_request):
     Invoked when a user first requests for news to be read.
     Takes a mycity_request object and starts a Alexa Dialog,
     asking the user to specify an RSS feed
+
+    Args:
+        mycity_request (MyCityRequestDataModel): Request object
+
+    Returns:
+        MyCityResponseDataModel: Response Object to send back to voice platform
+
     """
 
     mycity_response = MyCityResponseDataModel()
@@ -19,7 +26,9 @@ def rss_user_request(mycity_request):
     mycity_response.session_attributes = mycity_request.session_attributes
     mycity_response.should_end_session = False
     mycity_response.dialog_directive = "ElicitSlotRss"
-    mycity_response.output_speech = "Which news feed would you like to hear? Options are: {}".format(" , ".join(child_class_list))
+
+    child_class_list_as_string = " , ".join(child_class_list)
+    mycity_response.output_speech = "Which news feed would you like to hear? Options are: {}".format(child_class_list_as_string)
 
     return mycity_response
 
@@ -30,6 +39,13 @@ def rss_initialization(mycity_request):
     set up a few RSS-specific session variables
     in the Request object, and pass the request object
     onwards
+
+    Args:
+        mycity_request (MyCityRequestDataModel): Request object
+
+    Returns:
+        MyCityResponseDataModel: Response object to send to voice platform
+        
     """
     # Mutate request session variables, then pass request onwards for processing
     feed_name = mycity_request.intent_variables['RSS_FEED_NAME']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
@@ -46,11 +62,27 @@ def rss_initialization(mycity_request):
     # Send progressive response to prep the user
     send_progressive_response(mycity_request)
 
-    return rss_next_item(mycity_request)
+    mycity_response = rss_next_item(mycity_request)
+
+    return mycity_response
 
 
 def rss_next_headline(mycity_request):
+    """
+    Retrieves the next Headline in the RSS feed,
+    if one exists, and sends it back as the Output Speech
+
+    Args:
+        mycity_request (MyCityRequestDataModel): Request object
+
+    Returns:
+        MyCityResponseDataModel: Response object to send back to voice platform
+
+    """
+
+
     mycity_response = MyCityResponseDataModel()
+
     mycity_response.session_attributes = mycity_request.session_attributes
     mycity_response.card_title = "Reading {} news feed".format(mycity_response.session_attributes['rss_feed_name'])
     mycity_response.reprompt_text = None
@@ -71,6 +103,19 @@ def rss_next_headline(mycity_request):
 
 
 def fetch_next_headline(feed_name, current_headline_number):
+    """
+    Returns the URL and Output speech for the next
+    headline in the RSS feed.
+
+    Args:
+        feed_name (str): Name of the RSS feed
+        current_headline_number (int): Counter of current headline in RSS feed
+
+    Returns:
+        List[str, str]: Two item list containing URL of story and output speech to read the headline
+
+    """
+
     rss_feed_object = generate_rss_feed(feed_name)
     current_headline = rss_feed_object.parse_rss_headline(current_headline_number)
 
@@ -85,6 +130,20 @@ def fetch_next_headline(feed_name, current_headline_number):
 
 
 def rss_user_response(mycity_request, read_more):
+    """
+    After reading a headline or a news story, the user is prompted
+    if they want to continue. This function handles that user response
+
+    Args:
+        mycity_request (MyCityRequestDataModel): Request object
+        read_more (bool): True if user responds YES. False if User responds NO.
+
+    Returns:
+        MyCityResponseDataModel: Response object to send back to voice platform
+
+    """
+
+
     reading_headline = mycity_request.session_attributes['reading_headline']
 
     if reading_headline == False and read_more == True:
@@ -114,6 +173,17 @@ def rss_user_response(mycity_request, read_more):
 
 
 def send_progressive_response(mycity_request):
+    """
+    Sends a progressive response while RSS intent is intialized.
+    Response is a voice-only prompt to orient the user"
+    (See https://developer.amazon.com/docs/custom-skills/send-the-user-a-progressive-response.html)
+
+    Args:
+        mycity_request (MyCityRequestDataModel): Request object
+
+    """
+
+
     url_endpoint = "{}/v1/directives".format(mycity_request.api_variables['apiEndpoint'])
     directive_authorization = "Bearer {}".format(mycity_request.api_variables['apiAccessToken'])
     headers = {'Authorization': directive_authorization, 'Content-Type': 'application/json'}
@@ -121,9 +191,6 @@ def send_progressive_response(mycity_request):
     speech = "Great, I will read the news feed from {}. Please say Next at any time to skip to the next story".format(mycity_request.session_attributes['rss_feed_name']) 
     request_body = { 'header': { 'requestId' : mycity_request.request_id }, 'directive': { 'type': 'VoicePlayer.Speak', 'speech' : speech}}
 
-    print("url_endpoint: {}".format(url_endpoint))
-    print("directive_auth: {}".format(directive_authorization))
-    print("request_body: {}".format(request_body)) 
     request_result = requests.post(url_endpoint, headers=headers, json=request_body)
     print("Progressive Response API POST request returned: {}".format(request_result.status_code))
 

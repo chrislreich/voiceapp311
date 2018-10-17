@@ -14,7 +14,8 @@ from .intents.unhandled_intent import unhandled_intent
 from .intents.get_alerts_intent import get_alerts_intent
 from .intents.snow_parking_intent import get_snow_emergency_parking_intent
 from .intents import intent_constants
-from .intents.rss_intent import rss_initialization, rss_next_headline, rss_user_response, rss_user_request
+from .intents.rss_intent import rss_initialization, \
+        rss_next_headline, rss_user_response, rss_user_request
 
 LOG_CLASS = '\n\n[class: MyCityController]'
 
